@@ -22,7 +22,7 @@ def timing(f):
         ts = time.time()
         result = f(*args, **kw)
         te = time.time()
-        print('TIMING:func:%r took: %2.5f sec' % (f.__name__, te-ts))
+#        print('TIMING:func:%r took: %2.5f sec' % (f.__name__, te-ts))
         return result
     return wrap
 
@@ -45,7 +45,7 @@ def get_args():
     return parser.parse_args()
 
 
-# @timing
+ @timing
 def load_mdsplus_data(tree, chan):
     data = getattr(tree.TRANSIENT1, "INPUT_{:03d}".format(chan)).CAL_INPUT.data()
     return data
@@ -56,7 +56,7 @@ def dprint(message):
         print(message)
 
 
-# @timing
+@timing
 def analyse_open_circuit(channel):
     rms = np.sqrt(np.mean(channel**2))
     mn = np.min(channel)
@@ -65,7 +65,7 @@ def analyse_open_circuit(channel):
     return [rms, mn, mx, sd]
 
 
-# @timing
+@timing
 def remove_consec_incrs(array):
     non_consec = []
     for index, item in enumerate(array[0]):
@@ -74,7 +74,7 @@ def remove_consec_incrs(array):
     return non_consec
 
 
-# @timing
+@timing
 def get_first_last_total_edges(channel, threshold=0.3):
     diffs = np.abs(np.diff(channel))
     where = np.where(diffs > threshold, 1, 0)
@@ -93,7 +93,7 @@ def get_first_last_total_edges(channel, threshold=0.3):
         return [first, last, total]
 
 
-# @timing
+@timing
 def get_nsamples_jrs(decims):
     j = np.sum(decims == 20)
     r = np.sum(decims == 2)
