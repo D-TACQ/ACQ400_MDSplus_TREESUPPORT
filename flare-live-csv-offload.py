@@ -158,8 +158,9 @@ def get_shot():
     # print(shot)
     for xx in range(500):
         try:
-            shot = int(os.popen("get_shot acq2106_227").read().split("\n")[-2])-1
-            return shot
+            with os.popen("get_shot acq2106_227") as pipe:
+                shot = int(pipe.read().split("\n")[-2])-1
+                return shot
         except Exception:
             print("Can't get shot right now...")
             # import time
