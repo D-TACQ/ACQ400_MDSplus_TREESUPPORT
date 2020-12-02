@@ -8,20 +8,19 @@ import matplotlib.pyplot as plt
 import os
 import sys
 import pandas as pd
-import time
+import time as time1
 from functools import wraps
 import struct
 
-
-time.sleep(1)
 
 
 def timing(f):
     @wraps(f)
     def wrap(*args, **kw):
-        ts = time.time()
+        ts = time1.time()
         result = f(*args, **kw)
-        te = time.time()
+        te = time1.time()
+# comment out next line to stub timing report globally
 #        print('TIMING:func:%r took: %2.5f sec' % (f.__name__, te-ts))
         return result
     return wrap
@@ -45,7 +44,7 @@ def get_args():
     return parser.parse_args()
 
 
- @timing
+@timing
 def load_mdsplus_data(tree, chan):
     data = getattr(tree.TRANSIENT1, "INPUT_{:03d}".format(chan)).CAL_INPUT.data()
     return data
@@ -77,7 +76,13 @@ def remove_consec_incrs(array):
 @timing
 def get_first_last_total_edges(channel, threshold=0.3):
     diffs = np.abs(np.diff(channel))
+#    if len(where) > 2000:
+#        return ["too many diffs", "too many diffs", "too many diffs"]
     where = np.where(diffs > threshold, 1, 0)
+    if (where == 1).sum() > 2000:
+        return ["too many diffs", "too many diffs", "too many diffs"]
+
+
 
     if (where == 1).sum() == 0:
         first = np.nan
@@ -149,7 +154,8 @@ def offload_csv_data(csv_file, uuts, shot):
 
     df = get_df(uuts,shot)
     print("Got df")
-    df.to_csv('my_csv.csv', mode='a', header=False)
+    _header = False if (shot > first_shot) else True
+    df.to_csv('flare_{}_mds_live.csv'.format(first_shot), mode='a', header=_header)
     return None
 
 
@@ -163,14 +169,16 @@ def get_shot():
                 return shot
         except Exception:
             print("Can't get shot right now...")
-            # import time
-            time.sleep(5)
+            #import time
+            time1.sleep(0.5)
     return shot
 
 
 def start_live(csv_file, uuts):
     # if os.path.isfile(csv_file)
     prev_shot_done = get_shot()
+    global first_shot
+    first_shot = prev_shot_done + 1
     while True:
         latest_shot_done = get_shot()
         print("Latest: {}".format(latest_shot_done))
@@ -181,8 +189,8 @@ def start_live(csv_file, uuts):
             # continue
         prev_shot_done = latest_shot_done
         print("Sleeping")
-        import time
-        time.sleep(2)
+#        import time
+        time1.sleep(0.5)
 
     return None
 
