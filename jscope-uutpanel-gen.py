@@ -14,6 +14,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="jScope file creator.")
     parser.add_argument('--max_rows', default=8, type=int, help="max rows")
     parser.add_argument('--node', default="tr", type=str, help="top node")
+    parser.add_argument('--nchan', default=1, type=int, help="channels per panel")
     parser.add_argument('uuts', nargs='+', help="uut list")
     return parser.parse_args()
 
@@ -38,7 +39,6 @@ def create_new_jscp(args, text):
         cols = 2
         rows = (len(args.uuts)/2, len(args.uuts)//2,)
 
-    text += "Scope.plot_1_1.y_expr_1: \TOP:{}:INPUT_001\n".format(args.node)
     text += "Scope.plot_1_1.num_shot: 1\n"
 
     text = text.replace("Scope.rows_in_column_2: 1",
@@ -57,22 +57,24 @@ def create_new_jscp(args, text):
 
     row = 1
     col = 1
-    for num, uut in enumerate(args.uuts):
-        if num == rows[0]:
+    for id, uut in enumerate(args.uuts):
+        if id == rows[0]:
             row = 1
             col = 2
 
-        if num != 0:
+        if id != 0:
             text += new_text.format(index=row, column=col)
         text += "Scope.plot_{}_{}.title: '{} shot: '//$SHOT\n".format(
             row, col, uut.upper())
         text += "Scope.plot_{}_{}.experiment: {}\n".format(row, col, uut.upper())
-        #text += "Scope.plot_{}_1.num_expr: {}\n".format(row+1, num+1)
-        text += "Scope.plot_{}_{}.mode_1D_1_1: Line\n".format(row, col)
-        text += "Scope.plot_{}_{}.mode_2D_1_1: xz(y)\n".format(row, col)
-        text += "Scope.plot_{}_{}.color_1_1: 0\n".format(row, col)
-        text += "Scope.plot_{}_{}.marker_1_1: 0\n".format(row, col)
-        text += "Scope.plot_{}_{}.step_marker_1_1: 1\n\n".format(row, col)
+        text += "Scope.plot_{}_{}.num_expr: {}\n".format(row, col, args.nchan)
+        for ch in range(1,args.nchan+1):
+            text += "Scope.plot_{}_{}.y_expr_{}: \TOP:{}:INPUT_{:03d}\n".format(row, col, ch, args.node, ch)
+            text += "Scope.plot_{}_{}.color_1_1: {}\n".format(row, col, ch)
+            text += "Scope.plot_{}_{}.mode_1D_1_1: Line\n".format(row, col)
+            text += "Scope.plot_{}_{}.mode_2D_1_1: xz(y)\n".format(row, col)
+            text += "Scope.plot_{}_{}.marker_1_1: 0\n".format(row, col)
+            text += "Scope.plot_{}_{}.step_marker_1_1: 1\n\n".format(row, col)
         row += 1
     print(text)
     return None
