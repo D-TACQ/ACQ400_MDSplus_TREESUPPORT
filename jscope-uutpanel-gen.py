@@ -17,6 +17,7 @@ def get_args():
     parser.add_argument('--max_rows', default=8, type=int, help="max rows")
     parser.add_argument('--node', default="tr", type=str, help="top node")
     parser.add_argument('--nchan', default=1, type=int, help="channels per panel")
+    parser.add_argument('--waterfall', default=0, type=float, help="waterfall plot, offset per channel")
     parser.add_argument('uuts', nargs='+', help="uut list")
     return parser.parse_args()
 
@@ -72,7 +73,8 @@ def create_new_jscp(args, text):
         text += "Scope.plot_{}_{}.experiment: {}\n".format(row, col, uut.upper())
         text += "Scope.plot_{}_{}.num_expr: {}\n".format(row, col, args.nchan)
         for ch in range(1,args.nchan+1):
-            text += "Scope.plot_{}_{}.y_expr_{}: \TOP:{}:INPUT_{:03d}\n".format(row, col, ch, args.node, ch)
+            wf = "" if args.waterfall == 0.0 else "+ {}".format(args.waterfall*ch)
+            text += "Scope.plot_{}_{}.y_expr_{}: \TOP:{}:INPUT_{:03d}{}\n".format(row, col, ch, args.node, ch, wf)
             text += "Scope.plot_{}_{}.color_1_1: {}\n".format(row, col, ch)
             text += "Scope.plot_{}_{}.mode_1D_1_1: Line\n".format(row, col)
             text += "Scope.plot_{}_{}.mode_2D_1_1: xz(y)\n".format(row, col)
