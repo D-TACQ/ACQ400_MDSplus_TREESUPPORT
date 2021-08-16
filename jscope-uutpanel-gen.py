@@ -3,6 +3,8 @@
 """
 Example:
 ./jscope-uutpanel-gen.py $UUTS > ~/jScope/configurations/FLARE_2COL.jscp
+
+./jscope-uutpanel-gen.py --node=TR --nchan=8 $UUTS > ~/jScope/configurations/zap4.8.jscp
 """
 
 import MDSplus
@@ -39,20 +41,21 @@ def create_new_jscp(args, text):
         cols = 2
         rows = (len(args.uuts)/2, len(args.uuts)//2,)
 
-    text += "Scope.plot_1_1.num_shot: 1\n"
+#    text = text.replace("Scope.plot_1_1.num_shot: 1",
+#			"Scope.plot_1_1.num_shot: 0")
+    text = text.replace("Scope.plot_1_1.num_expr: 0", "Scope.plot_1_1.num_expr: {}".format(args.nchan))
 
+    text = text.replace("Scope.columns: 2", "Scope.columns: {}".format(cols))
     text = text.replace("Scope.rows_in_column_2: 1",
                         "Scope.rows_in_column_2: {}".format(rows[1]))
     text = text.replace("Scope.rows_in_column_1: 1",
                         "Scope.rows_in_column_1: {}".format(rows[0]))
-    text = text.replace("Scope.plot_1_1.num_expr: 0",
-                        "Scope.plot_1_1.num_expr: 1")
     text = text.replace("Scope.plot_1_1.global_defaults: -1",
                         "Scope.plot_1_1.global_defaults: 196353")
 
     for line in text.split("\n"):
         if line.startswith("Scope.plot_1_1"):
-            line_to_add = line.replace("1_1", "{index}_{column}")
+            line_to_add = line.replace("1_1", "{_row}_{_col}")
             new_text += line_to_add + "\n"
 
     row = 1
@@ -63,7 +66,7 @@ def create_new_jscp(args, text):
             col = 2
 
         if id != 0:
-            text += new_text.format(index=row, column=col)
+            text += new_text.format(_row=row, _col=col)
         text += "Scope.plot_{}_{}.title: '{} shot: '//$SHOT\n".format(
             row, col, uut.upper())
         text += "Scope.plot_{}_{}.experiment: {}\n".format(row, col, uut.upper())
