@@ -2,6 +2,7 @@
 
 MDSplus now supports python based devices. This document outlines how to install the latest MDSplus device code for use with D-TACQ acq400 series devices.
 
+NB: older versions MDSplus depend on python2, not python3; if this is the case, please substitute "python2" for "python3" in the examples..
 
 # Code installation
 
@@ -34,11 +35,11 @@ NB: this means you have the bleeding edge MDSplus code, but perhaps older D-TACQ
 
 There is a script to create MDSplus device trees. If the user wishes to use MDSTCL to install the trees this is also possible and the steps are very similar to the python, however the python automates a lot of the steps like checking channel counts. Note that the script will install the tree by default in ~/TREES/. An example command line would be something like:
 
-    python3 ./make_acq400_device.py --model=mr --name='TRANSIENT1' --nchan=48 --carrier=acq2106 acq2106_201
+    python3 ./make_acq400_device.py --model=mr --name='TRANSIENT1' acq2106_201
 
 This will print some messages about how MDSplus needs the user to add information to the path. It is possible to automate this as well for many UUTs:
 
-    for uut in {201..226}; do echo "acq2106_${uut}_path /home/dt100/TREES/acq2106_${uut}" | sudo tee -a /usr/local/mdsplus/local/envsyms; export acq2106_${uut}_path=/home/dt100/TREES/acq2106_$uut; python3 ./make_acq400_device.py --model=mr --name=TRANSIENT1 --nchan=48 acq2106_${uut}; done
+    for uut in {201..226}; do echo "acq2106_${uut}_path /home/dt100/TREES/acq2106_${uut}" | sudo tee -a /usr/local/mdsplus/local/envsyms; export acq2106_${uut}_path=/home/dt100/TREES/acq2106_$uut; python3 ./make_acq400_device.py --model=mr --name=TRANSIENT1 acq2106_${uut}; done
 
 
 ## Viewing data using jScope
