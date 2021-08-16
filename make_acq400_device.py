@@ -31,7 +31,7 @@ def get_args():
     parser.add_argument('--model', default='tr', type=str,
                         help='One of: tr, st or mr (transient, streaming or multi-rate).')
 
-    parser.add_argument('--name', default='default', type=str,
+    parser.add_argument('--devname', default='default', type=str,
                         help='Desired name of MDSplus device. This is what the device will be referred to as in MDSplus.')
 
     parser.add_argument('--hostname', default='default', type=str,
@@ -59,13 +59,14 @@ def make_device(tname, args):
 
     # e.g. acq2106_32_tr for 32 channel acq2106 in transient capture mode.
     model = "{}_{}_{}".format(carrier_type, args.model, nchan)
-    tree.addDevice(args.name, model)
+    print("pgm: call tree.addDevice({}, {})".format(args.devname, model))
+    tree.addDevice(args.devname, model)
     tree.write()
 
     tree = MDSplus.Tree(tname, -1, "EDIT")
 
     # Change node name to tree name
-    node = tree.getNode(args.name).getNode("node")
+    node = tree.getNode(args.devname).getNode("node")
     node.putData(str(hostname))
 
     # Create pulse 0.
