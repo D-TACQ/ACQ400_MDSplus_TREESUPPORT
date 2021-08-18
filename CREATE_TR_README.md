@@ -6,13 +6,12 @@ NB: older versions MDSplus depend on python2, not python3; if this is the case, 
 
 # Code installation
 
-There are a few repositories that will need to be installed first. The relevant repositories should be installed in ~/PROJECTS/, or using yum and pip. To create a ~/PROJECTS/ folder just run the following code:
+There are a few repositories that will need to be installed first. The relevant repositories should be installed in ~/PROJECTS/. To create a ~/PROJECTS/ folder just run the following code:
 
 The PC should have MDSplus installed in the normal way at /usr/local/mdsplus
 
 ## Clone the tree support repository
 
-The tree support repository offers the user some options for installing the device code. If the user already has an MDSplus installation on the centos machine they want to use then the user can patch in the device code. If the user is installing on a fresh machine then they could choose to install from the MDSplus-alpha repo vs the stable repo and the new device code will be installed. To clone the tree support repo run the following code:
 
     git clone https://github.com/D-TACQ/ACQ400_MDSplus_TREESUPPORT.git ~/PROJECTS/
 
