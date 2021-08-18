@@ -8,11 +8,7 @@ NB: older versions MDSplus depend on python2, not python3; if this is the case, 
 
 There are a few repositories that will need to be installed first. The relevant repositories should be installed in ~/PROJECTS/, or using yum and pip. To create a ~/PROJECTS/ folder just run the following code:
 
-## Install acq400_hapi
-
-D-TACQ provide python API code via PIP. This should be installed using the following command:
-
-    sudo pip3 install acq400_hapi
+The PC should have MDSplus installed in the normal way at /usr/local/mdsplus
 
 ## Clone the tree support repository
 
@@ -20,22 +16,16 @@ The tree support repository offers the user some options for installing the devi
 
     git clone https://github.com/D-TACQ/ACQ400_MDSplus_TREESUPPORT.git ~/PROJECTS/
 
-### If you want to patch the code (you are not using the MDSplus-alpha repo)
-
-To do this the user should use the following script to automatically clone the code needed to patch the repo:
+### Install all other projects, including HAPI
 
     cd PROJECTS/ACQ400_MDSplus_TREESUPPORT
     ./install_acq400_mdsplus.sh
-
-### If you want to use the mdsplus-alpha repo
-If you install the mdsplus-alpha repo then there are no extra steps. You already have the device code.
-NB: this means you have the bleeding edge MDSplus code, but perhaps older D-TACQ code. In this case, we'd recommend replacing the mdsplus-alpha pydevices/acq400Devices directory with the corresponding directory from https://github.com/D-TACQ/ACQ400_MDSPLUS.git
 
 ## Installing a tree with a new MDSplus device node
 
 There is a script to create MDSplus device trees. If the user wishes to use MDSTCL to install the trees this is also possible and the steps are very similar to the python, however the python automates a lot of the steps like checking channel counts. Note that the script will install the tree by default in ~/TREES/. An example command line would be something like:
 
-    python3 ./make_acq400_device.py --model=mr --name='TRANSIENT1' acq2106_201
+    python ./make_acq400_device.py --model=mr --name='TRANSIENT1' acq2106_201
 
 This will print some messages about how MDSplus needs the user to add information to the path. It is possible to automate this as well for many UUTs:
 
