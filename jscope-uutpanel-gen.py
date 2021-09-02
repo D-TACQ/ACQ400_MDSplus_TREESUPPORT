@@ -75,7 +75,7 @@ def create_new_jscp(args, text):
         for ch in range(1,args.nchan+1):
             wf = "" if args.waterfall == 0.0 else "+ {}".format(args.waterfall*ch)
             text += "Scope.plot_{}_{}.y_expr_{}: \TOP:{}:INPUT_{:03d}{}\n".format(row, col, ch, args.node, ch, wf)
-            text += "Scope.plot_{}_{}.color_1_1: {}\n".format(row, col, ch)
+            text += "Scope.plot_{}_{}.color_{}_1: {}\n".format(row, col, ch, ch%8)
             text += "Scope.plot_{}_{}.mode_1D_1_1: Line\n".format(row, col)
             text += "Scope.plot_{}_{}.mode_2D_1_1: xz(y)\n".format(row, col)
             text += "Scope.plot_{}_{}.marker_1_1: 0\n".format(row, col)
