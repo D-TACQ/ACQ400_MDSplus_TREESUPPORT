@@ -16,7 +16,7 @@ def set_next_shot(args):
     else:
         sn = max(old_shots) + 1
         
-    for tree in args.uuts:
+    for ix, tree in enumerate(args.uuts):
         if args.verbose:
             print("new_shot Setting MDSplus tree %s to shot %d" % (tree, sn))
         MDSplus.Tree.setCurrent(tree, sn)
@@ -34,6 +34,13 @@ def set_next_shot(args):
                 field = model.getNode(fieldname)
                 field.putData(float(value))
             else:
+                print("ERROR FIELD=value required, got {}".format(args))
+        if args.TOFF:
+            fieldname, value = args.TOFF.split('=')
+            if fieldname and value:
+                field = model.getNode(fieldname)
+                field.putData(float(value)*ix)
+            else:
                 print("ERROR FIELD=value required, got {}".format(args))                
 
         model.createPulse(sn)
@@ -45,6 +52,7 @@ def run_main():
     parser.add_argument('--shot', default=-99, type=int, help='specify shot number')
     parser.add_argument('--puti', default=None, type=str, help='NODE=intval set NODE value integer')
     parser.add_argument('--putf', default=None, type=str, help='NODE=fval set NODE value float')
+    parser.add_argument('--TOFF', default=None, type=str, help='TR.TOFF=fval time offset per HDMI link, float sec, increment by UUT in chain')
     parser.add_argument('uuts', nargs='+', help="uut list")
     set_next_shot(parser.parse_args())
 
