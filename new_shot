@@ -28,6 +28,13 @@ def set_next_shot(args):
                 field.putData(int(value))
             else:
                 print("ERROR FIELD=value required, got {}".format(args))
+        if args.putf:
+            fieldname, value = args.putf.split('=')
+            if fieldname and value:
+                field = model.getNode(fieldname)
+                field.putData(float(value))
+            else:
+                print("ERROR FIELD=value required, got {}".format(args))                
 
         model.createPulse(sn)
     return sn
@@ -37,6 +44,7 @@ def run_main():
     parser.add_argument('--verbose', default=1, type=int, help='show shot number')
     parser.add_argument('--shot', default=-99, type=int, help='specify shot number')
     parser.add_argument('--puti', default=None, type=str, help='NODE=intval set NODE value integer')
+    parser.add_argument('--putf', default=None, type=str, help='NODE=fval set NODE value float')
     parser.add_argument('uuts', nargs='+', help="uut list")
     set_next_shot(parser.parse_args())
 
