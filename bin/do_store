@@ -1,0 +1,31 @@
+#!/usr/bin/env expect
+
+if { $::argc > 1 } {
+	set TREE [lindex $::argv 0 ]
+	set NODE [lindex $::argv 1 ]
+} else {
+        puts usage do_store TREE NODE
+	exit 1
+}
+log_user 1
+log_file -a "$TREE.log"
+set timeout 9999
+spawn mdstcl
+
+expect "TCL>" {
+	puts OK1
+}
+send "set tree $TREE/shot=0\r"
+
+expect "TCL>" {
+	puts OK2
+}
+
+send "do/method $NODE storeb\r"
+
+expect "TCL>" {
+	puts OK3
+}
+
+
+
