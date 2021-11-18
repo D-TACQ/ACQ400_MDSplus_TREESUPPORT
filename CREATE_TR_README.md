@@ -56,10 +56,14 @@ The newly created acq2106_mr.jscp can then be loaded from jScope by selecting 'c
 
 The following script will offload data from a single UUT or multiple UUTs in parallel:
 
+```bash
 ./mdsplus-new-shot-upload-uuts acq2106_338
+```
 
 or, where $UUTS defines a list of devices:
 
+```bash
 ./mdsplus-new-shot-upload-uuts $UUTS
+```
 
 
