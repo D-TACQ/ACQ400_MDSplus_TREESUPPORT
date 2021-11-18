@@ -1,0 +1,25 @@
+#!/bin/bash
+#export PYTHONPATH=~/PROJECTS/acq400_hapi/
+#export PYTHONPATH=/home/dt100/PROJECTS/acq400_hapi:/usr/local/mdsplus/pydevices
+
+#export NETCLIENT_TRACE=1
+TR_FREQ=${TR_FREQ:-30000000}
+TR_TOFF=${TR_TOFF:-20e-9}
+
+if [ "x$1" = "x" ]; then
+  echo echo "USAGE: mdsplus-new-shot-upload-uuts UUT1 [UUT2 ..]"
+  exit 0
+else
+  UUTS="$*"
+fi
+
+new_shot --puti=TR:FREQ=${TR_FREQ} --TOFF=TR.TOFF=${TR_TOFF} $UUTS
+
+for u in $UUTS; do
+  ./bin/do_store $u TR &
+done
+
+
+for u in $UUTS; do
+  wait
+done
