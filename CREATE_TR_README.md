@@ -25,7 +25,7 @@ The PC should have MDSplus installed in the normal way at /usr/local/mdsplus
 
 There is a script to create MDSplus device trees. If the user wishes to use MDSTCL to install the trees this is also possible and the steps are very similar to the python, however the python automates a lot of the steps like checking channel counts. Note that the script will install the tree by default in ~/TREES/. An example command line would be something like:
 
-    python ./make_acq400_device.py --model=tr --name='TR' --carrier=acq2106 acq2106_201
+    python ./make_acq400_device.py --model=tr --devname='TR' acq2106_338
 
 This will print some messages about how MDSplus needs the user to add information to the path. It is possible to automate this as well for many UUTs:
 ```bash
