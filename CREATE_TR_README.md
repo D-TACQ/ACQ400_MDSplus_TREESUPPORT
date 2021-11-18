@@ -66,4 +66,14 @@ or, where $UUTS defines a list of devices:
 ./bin/mdsplus-new-shot-upload-uuts $UUTS
 ```
 
+### NB: dependency on expect(1)
+
+```bash
+./bin/mdsplus-new-shot-upload-uuts calls ./bin/do_store, an expect(1) wrapped on MDSTCL. So the tcl/expect package
+eg
+expect-5.45-14.el7_1.x86_64
+is required. This should be replaced by a pure-python interface.
+```
+
+
 
