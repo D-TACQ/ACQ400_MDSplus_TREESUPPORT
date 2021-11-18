@@ -51,3 +51,15 @@ Once this is done the user can create custom jscp files for use with jScope. The
     python ./jscope-uutpanel-gen.py --node=TR --nchan=8 $UUTS > ~/jScope/configurations/zap318.8.jscp
 
 The newly created acq2106_mr.jscp can then be loaded from jScope by selecting 'customize' -> 'use saved settings from' and then choosing acq2106_mr.jscp.
+
+## Offload data after a shot
+
+The following script will offload data from a single UUT or multiple UUTs in parallel:
+
+./mdsplus-new-shot-upload-uuts acq2106_338
+
+or, where $UUTS defines a list of devices:
+
+./mdsplus-new-shot-upload-uuts $UUTS
+
+
